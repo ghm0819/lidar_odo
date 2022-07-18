@@ -14,8 +14,8 @@
 #include <visualization_msgs/Marker.h>
 #include <visualization_msgs/MarkerArray.h>
 
-#include <opencv/cv.h>
-
+#include <opencv2/imgproc.hpp>
+#include <pcl/impl/pcl_base.hpp>
 #include <pcl/common/common.h>
 #include <pcl/common/transforms.h>
 #include <pcl/filters/crop_box.h>
@@ -30,6 +30,8 @@
 #include <pcl/registration/icp.h>
 #include <pcl/search/impl/search.hpp>
 #include <pcl_conversions/pcl_conversions.h>
+#include <pcl/filters/filter.h>
+#include <pcl/filters/passthrough.h>
 
 #include <tf/LinearMath/Quaternion.h>
 #include <tf/transform_broadcaster.h>

@@ -27,6 +27,10 @@ public:
 	int downsampleRate;
 	float lidarMinRange;
 	float lidarMaxRange;
+	float x_range_min;
+	float x_range_max;
+	float y_range_min;
+	float y_range_max;
 
 	// IMU
 	float imuAccNoise;
@@ -89,6 +93,10 @@ public:
 		nh.param<int>("lidar_odo/downsampleRate", downsampleRate, 1);
 		nh.param<float>("lidar_odo/lidarMinRange", lidarMinRange, 1.0);
 		nh.param<float>("lidar_odo/lidarMaxRange", lidarMaxRange, 100.0);
+        nh.param<float>("lidar_odo/x_range_min", x_range_min, -4.0);
+        nh.param<float>("lidar_odo/x_range_max", x_range_max, 0.5);
+        nh.param<float>("lidar_odo/y_range_min", y_range_min, -1.2);
+        nh.param<float>("lidar_odo/y_range_max", y_range_max, 1.2);
 
 		nh.param<float>("lidar_odo/imuAccNoise", imuAccNoise, 0.01);
 		nh.param<float>("lidar_odo/imuGyrNoise", imuGyrNoise, 0.001);

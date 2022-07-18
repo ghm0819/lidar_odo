@@ -1,8 +1,8 @@
 lidar_odo:
   # Topics
-  pointCloudTopic: "/hesai40p_points_xyzirt"               # Point cloud data
-  imuTopic: "/imu"                         # IMU data
-  odomTopic: "odometry/imu"                   # IMU pre-preintegration odometry, same frequency as IMU
+  pointCloudTopic: "/apollo_sensor_hesai40_PointCloud2"
+  imuTopic: "/imu"
+  odomTopic: "odometry/imu"
 
   # Frames
   lidarFrame: "lidar_link"
@@ -17,6 +17,10 @@ lidar_odo:
   downsampleRate: 1                           # default: 1. Downsample your data if too many points. i.e., 16 = 64 / 4, 16 = 16 / 1 
   lidarMinRange: 1.0                          # default: 1.0, minimum lidar range to be used
   lidarMaxRange: 100.0                       # default: 1000.0, maximum lidar range to be used
+  x_range_min: -4.0
+  x_range_max: 0.5
+  y_range_min: -1.2
+  y_range_max: 1.2
 
   # IMU Settings
   imuAccNoise: 3.9939570888238808e-03
@@ -26,10 +30,10 @@ lidar_odo:
   imuGravity: 9.80511
   imuRPYWeight: 0.01
 
-  extrinsicTrans: [0.0153689, 0.467894, 1.52664]
-  extrinsicRot: [ -0.0157134, -0.999858, -0.00603129,
-                   0.999875, -0.0157235, 0.00164227,
-                  -0.00173687, -0.00600473, 0.99998]
+  extrinsicTrans: [-0.0581933, 3.07625, 1.56302]
+  extrinsicRot: [ -0.0358049, -0.999206, -0.0174846,
+                  0.998601, -0.0364535, 0.0383042,
+                  -0.0389111, -0.0160887, 0.999113]
   # LOAM feature threshold
   edgeThreshold: 1.0
   surfThreshold: 0.1

@@ -94,18 +94,38 @@ bool FeatureExtraction::cachePointCloud(const sensor_msgs::PointCloud2ConstPtr &
 	// convert cloud
 	currentCloudMsg = cloudQueue.front();
 	cloudQueue.pop_front();
-	pcl::fromROSMsg(currentCloudMsg, *laserCloudIn);
+	/////////// filter the self cloud
+	pcl::PointCloud<PointXYZIRT>::Ptr laserCloudInTemp;
+    laserCloudInTemp.reset(new pcl::PointCloud<PointXYZIRT>());
+	pcl::fromROSMsg(currentCloudMsg, *laserCloudInTemp);
+    std::vector<int> mapping_indices;
+    pcl::removeNaNFromPointCloud(*laserCloudInTemp, *laserCloudInTemp, mapping_indices);
 
-	std::vector<int> mapping_indices;
-	pcl::removeNaNFromPointCloud(*laserCloudIn, *laserCloudIn, mapping_indices);
+    pcl::PointCloud<PointXYZIRT>::Ptr laserCloudInTempX;
+    laserCloudInTempX.reset(new pcl::PointCloud<PointXYZIRT>());
+	pcl::PassThrough<PointXYZIRT> pass;
+	pass.setInputCloud(laserCloudInTemp);
+	pass.setFilterFieldName("x");
+	pass.setFilterLimits(x_range_min, x_range_max);
+    pass.setFilterLimitsNegative(true);
+    pass.filter(*laserCloudInTempX);
+
+    pass.setInputCloud(laserCloudInTempX);
+    pass.setFilterFieldName("y");
+    pass.setFilterLimits(y_range_min, y_range_max);
+    pass.setFilterLimitsNegative(true);
+    pass.filter(*laserCloudIn);
+    /////////////////////////
 
 	// get timestamp
 	cloudHeader = currentCloudMsg.header;
 	timeScanCur = cloudHeader.stamp.toSec(); // the start time of this point cloud
 	timeScanEnd = laserCloudIn->points.back().timestamp; // the end time of this point cloud
+	if (std::abs(timeScanEnd - timeScanCur) < 1e-3) {
+        timeScanEnd = timeScanCur + 1e-3;
+	}
 	// check dense flag
-	if (!laserCloudIn->is_dense)
-	{
+	if (!laserCloudIn->is_dense) {
 		ROS_ERROR("Point cloud is not in dense format, please remove NaN points first!");
 		ros::shutdown();
 	}
